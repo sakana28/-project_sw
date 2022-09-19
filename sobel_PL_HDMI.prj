@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="sobel_PL_HDMI" location="/home/benchmarker/vivado_bsp/INT_test_sw_new/AVNETSW/sobel_PL_HDMI" platform="/home/benchmarker/vivado_bsp/INT_test_sw_new/AVNETSW/SOBEL_HDMI/export/SOBEL_HDMI/SOBEL_HDMI.xpfm" platformUID="xilinx:zedboard::0.0(custom)" systemProject="sobel_PL_HDMI_system" sysConfig="SOBEL_HDMI" runtime="cpp" cpu="standalone_ps7_cortexa9_0" cpuInstance="ps7_cortexa9_0" os="standalone" mssSignature="892e82b65bbaac146b6e39c47cb69692">
+  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.1581116602">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.382082353" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="empty_application"/>
+</sdkproject:SdkProject>
