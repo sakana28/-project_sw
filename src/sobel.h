@@ -1,3 +1,4 @@
+/* Description: generic driver for Sobel AXI4Lite peripheral*/
 
 #ifndef SOBEL_H
 #define SOBEL_H

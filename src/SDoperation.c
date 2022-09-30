@@ -1,3 +1,7 @@
+/* Description: read/wreite images from SD card. Based on XILFFS library.*/
+
+
+
 #include <stdio.h>
 #include "platform.h"
 #include "xil_printf.h"
@@ -52,26 +56,24 @@ void load_sd_bmp(bmp_meta *pic, u32 *data_buffer) {
 	u8 GreenBuffer;
 	BYTE work[FF_MAX_SS];
 	FRESULT status;
-	//在 FatFs 模块上注册 /注销一个工作区 (文件系统对象 )
+
 	status = f_mount(&fatfs, "", 0);
 	if (status != FR_OK) {
 		xil_printf("volume is not FAT format\n");
-		//格式化SD卡
 		f_mkfs("", FM_FAT32, 0, work, sizeof work);
 		f_mount(&fatfs, "", 0);
 	}
 
-	//打开文件
+
 	f_open(&filsrc, "lena.bmp", FA_READ);
 
-	//移动文件读写指针到文件开头
+	//move r/w pointer to the beginning of the file
 	f_lseek(&filsrc, 54);
 	width = *(pic->bmp_width);
 	height = *(pic->bmp_height);
 	rowsize = pic->rowsize;
 
-	//读出图片，写入 DDR
-
+       // rearrange to 4 bytes 0x00RBG and pad 0
 	for (i = 1; i < height + 1; i++) {
 		for (j = 1; j < width + 1; j++) {
 			f_read(&filsrc, &BlueBuffer, 1, &br);
@@ -88,9 +90,6 @@ void load_sd_bmp(bmp_meta *pic, u32 *data_buffer) {
 
 void draw_frame(u32 *pixelMEM, u32 *data_buffer, u32 *sobel_buffer,
 		u32 frame_width, u32 frame_height, bmp_meta *pic) {
-	/*u8 RedBuffer;
-	 u8 GreenBuffer;
-	 u8 BlueBuffer;*/
 
 	int i;
 	int j;
@@ -98,10 +97,6 @@ void draw_frame(u32 *pixelMEM, u32 *data_buffer, u32 *sobel_buffer,
 	int width;
 	u32 *keep_pixelMEM;
 	keep_pixelMEM = pixelMEM;
-	//在 FatFs 模块上注册 /注销一个工作区 (文件系统对象 )
-
-	//打印 BMP 图片分辨率和大小
-
 	width = *(pic->bmp_width);
 	height = *(pic->bmp_height);
 
@@ -119,7 +114,7 @@ void draw_frame(u32 *pixelMEM, u32 *data_buffer, u32 *sobel_buffer,
 	}
 	//put frame pointer back to start point
 	pixelMEM = keep_pixelMEM;
-	//move pointer to bottom-left of contours
+	//move pointer to bottom-left of the processed image
 	pixelMEM = pixelMEM + frame_width * (frame_height / 2 + (int) (height / 2))
 			+ frame_width / 2 + 30;
 	for (i = 0; i < height; i++) {

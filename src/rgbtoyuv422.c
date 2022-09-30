@@ -93,7 +93,7 @@ int XSys_SetStreamParam(XVprocSs *pVprocss, u16 Direction, u16 Width,
 	XVidC_VideoStream Stream;
 	XVidC_VideoTiming const *TimingPtr;
 
-	//resId = XVidC_GetVideoModeId(Width, Height, FrameRate, IsInterlaced);
+	//resId = XVidC_GetVideoModeId(Width, Height, FrameRate, IsInterlaced); cannot find valid resId
 	resId = XVIDC_VM_1920x1080_60_P;
 	if (resId == XVIDC_VM_NOT_SUPPORTED)
 	{

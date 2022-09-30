@@ -1,3 +1,7 @@
+/* Description: Data transfer via DMA to Sobel user IP*/
+
+
+
 #include <stdio.h>
 #include "platform.h"
 #include "xil_printf.h"
@@ -29,13 +33,6 @@
 #define INTC		XScuGic
 #define INTC_HANDLER	XScuGic_InterruptHandler
 
-#define RESET_TIMEOUT_COUNTER	10000
-
-#define TEST_START_VALUE	0xC
-#define WORD_SIZE 4
-
-#define MAX_PKT_LEN		0x100
-
 /************************** Function Prototypes ******************************/
 static void TxIntrHandler(void *Callback);
 static void RxIntrHandler(void *Callback);
@@ -44,26 +41,23 @@ static int SetupIntrSystem(INTC * IntcInstancePtr, XAxiDma * AxiDmaPtr,
 static void DisableIntrSystem(INTC * IntcInstancePtr, u16 TxIntrId,
 		u16 RxIntrId);
 /************************** Variable Definitions *****************************/
-/*
- * Device instance definitions
- */
+/*Device instance definitions*/
 
 static XAxiDma AxiDma; /* Instance of the XAxiDma */
 
 static INTC Intc; /* Instance of the Interrupt Controller */
 
-/*
- * Flags interrupt handlers use to notify the application context the events.
- */
+/*Flags interrupt handlers use to notify the application context the events.*/
 
 volatile int Done;
 static int zero_width;
 static int zero_height;
 static int line_count;
-static XTime t_begin, t_end;
-static u32 t_used;
 extern u32 data_buffer[400000];
 extern u32 sobel_buffer[400000];
+
+static XTime t_begin, t_end;
+static u32 t_used;
 
 /*****************************************************************************/
 
@@ -95,7 +89,7 @@ int sobel_setup(bmp_meta *picsrc) {
 	/* Width configuration */
 	SOBEL_mWriteReg(XPAR_SOBEL_V1_0_0_BASEADDR, SOBEL_S00_AXI_SLV_REG0_OFFSET,
 			(u32 )zero_width);
-	/* Load SD to DDR */
+	/* Load image from SD to DDR */
 	load_sd_bmp(picsrc, data_buffer);
 	Xil_DCacheFlushRange((UINTPTR) data_buffer, 4 * zero_width * zero_height);
 
@@ -140,7 +134,7 @@ int sobel_setup(bmp_meta *picsrc) {
 	}
 	xil_printf("set send request\r\n");
 	line_count = 4;
-	//XScuGic_Enable(&Intc, SOBEL_INTR_ID);
+	//XScuGic_Enable(&Intc, SOBEL_INTR_ID); Optional
 	while (!Done) {
 		/* NOP */
 	}
